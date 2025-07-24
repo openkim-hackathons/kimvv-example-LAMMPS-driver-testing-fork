@@ -15,7 +15,11 @@ OPENKIM_TEST_DRIVERS = {
 }
 
 # List of URLs of development Test Drivers to test
-DEVEL_TEST_DRIVERS = {}
+DEVEL_TEST_DRIVERS = {
+    "https://github.com/openkim-hackathons/CrystalGenomeLAMMPSExample__TD_000000654322_000/archive/refs/tags/v000b0.tar.gz": {
+        "lmp_cmd": "mpirun -np 2 lmp"
+    }
+}
 
 
 def create_init(td_root_path: os.PathLike):
