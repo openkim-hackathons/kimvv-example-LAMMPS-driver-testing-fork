@@ -23,7 +23,7 @@ OPENKIM_TEST_DRIVERS = {
 
 # List of URLs of development Test Drivers to test
 DEVEL_TEST_DRIVERS = {
-    "https://github.com/openkim-hackathons/CrystalGenomeLAMMPSExample__TD_000000654322_000/archive/refs/tags/v000b1.tar.gz": {
+    "InProgress__TD_886935620320_000.txz": {
         "lmp_cmd": "mpirun -np 2 lmp"
     }
 }
