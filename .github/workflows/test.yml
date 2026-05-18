@@ -41,8 +41,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get -y install units
-          wget https://github.com/aflow-org/aflow/releases/download/v4.0.5/aflow-4.0.5-ubuntu22-amd64.tar.gz
-          tar -xf aflow-4.0.5-ubuntu22-amd64.tar.gz
+          wget https://github.com/aflow-org/aflow/releases/download/v4.1/aflow-4.1-ubuntu22-amd64.tar.gz
+          tar -xf aflow-4.1-ubuntu22-amd64.tar.gz
 
       - name: Install units and AFLOW on macOS
         if: runner.os == 'macOS'
@@ -56,11 +56,22 @@ jobs:
         shell: bash -el {0}
         run: |
           python pre_setup.py
-          python -m pip install .
+          # Install kimvv only into a special directory that we make unwriteable to mimic a system install
+          # This is to make sure test drivers don't need to write to their own files to run
+          mkdir local-python
+          python -m pip install . -t local-python --no-deps
+          chmod -R -w local-python
+
+          # Now install any dependencies normally. If we install without --no-deps
+          # above, it would install ALL dependencies, including reinstalling
+          # stuff that already exists in the conda env
+          echo "PYTHONPATH=$PYTHONPATH:$PWD/local-python" >> "$GITHUB_ENV"
+          python -c "from importlib.metadata import requires; print(' '.join(requires('kimvv')))" | xargs python -m pip install
+
 
       - name: Run tests
         shell: bash -el {0}
         run: |
-          export PATH=$PATH:$PWD/aflow-4.0.5-Linux/bin
+          export PATH=$PATH:$PWD/aflow-4.1.0-Linux/bin
           cd test
           pytest

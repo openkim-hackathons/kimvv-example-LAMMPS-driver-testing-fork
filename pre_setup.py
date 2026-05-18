@@ -2,9 +2,9 @@ import json
 import os
 import shutil
 import tarfile
+import time
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from urllib.error import HTTPError
 from urllib.request import urlcleanup, urlretrieve
 
 import kim_edn
@@ -32,7 +32,8 @@ DEVEL_TEST_DRIVERS = {
     }
 }
 
-MAX_URLLIB_ATTEMPTS = 10
+MAX_URLLIB_ATTEMPTS = 9999
+URLLIB_RETRY_TIMEOUT = 10
 
 
 def create_init(td_root_path: os.PathLike):
@@ -61,7 +62,10 @@ def urlretrieve_with_retries(url) -> str:
         try:
             tmpfile, _ = urlretrieve(url)
             return tmpfile
-        except HTTPError:
+        except Exception as e:
+            print("Failed to download item with the following exception:\n" + repr(e))
+            print(f"Retrying in {URLLIB_RETRY_TIMEOUT} seconds...")
+            time.sleep(URLLIB_RETRY_TIMEOUT)
             pass
     raise RuntimeError(
         f"Failed to download {url}" f" after {MAX_URLLIB_ATTEMPTS} attempts."
