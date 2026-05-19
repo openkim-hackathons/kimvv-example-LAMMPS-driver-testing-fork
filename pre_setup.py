@@ -25,7 +25,7 @@ OPENKIM_TEST_DRIVERS = {
 
 # List of URLs of development Test Drivers to test
 DEVEL_TEST_DRIVERS = {
-    "NPTCrystalStructure-000b5.tar.gz": {
+    "NPTCrystalStructure-000b65.tar.gz": {
         "temperature_K": 293.15,
         "repeat": (4, 4, 4),
         "lammps_command": "mpirun -np 2 lmp",
